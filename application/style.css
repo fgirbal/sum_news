@@ -4,6 +4,11 @@ html {
 	font-family: 'Open Sans', sans-serif;
 }
 
+body {
+	background: white;
+	transition: background .5s;
+}
+
 #main_content {
 	padding: 100px;
 	padding-top: 18vh;
@@ -27,11 +32,15 @@ html {
 
 h1 {
 	font-weight: 300;
+	transition: color .5s;
+	color: #424242;
 }
 
 h2 {
+	color: black;
 	font-weight: 300;
 	font-size: larger;
+	transition: color .5s;
 }
 
 h5 {

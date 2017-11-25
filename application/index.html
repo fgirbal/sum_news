@@ -4,7 +4,7 @@
 	<title>MinimalNews</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body id="body">
 
 <div id="main_content">
 	<h1 id='header_text'>Good Morning Joe,</h1>
@@ -19,7 +19,16 @@
 
 <script type="text/javascript">
 	function toggleScheme() {
-		document.getElementbyID('main_text').style.color = "red";
+		var x = document.querySelector('body');
+		if (x.style.background == "black") {
+			x.style.background = "white";
+			document.getElementById("header_text").style.color = "black";
+			document.getElementById("main_text").style.color = "#424242";
+		} else {
+			x.style.background = "black";
+			document.getElementById("header_text").style.color = "white";
+			document.getElementById("main_text").style.color = "#CECECE";
+		}
 	}
 </script>
 </html>
