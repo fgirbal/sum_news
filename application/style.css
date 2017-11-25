@@ -11,9 +11,14 @@ body {
 
 #main_content {
 	padding: 100px;
-	padding-top: 18vh;
+	padding-top: 20vh;
 	padding-bottom: 50px;
 	font-size: x-large;
+}
+
+#main_text {
+	opacity: 0;
+	transition: opacity 2.5s;
 }
 
 #main_bar {
@@ -49,6 +54,35 @@ h5 {
 
 a {
 	color: #7FBCD4;
+}
+
+.keyword {
+	color: #D3D3D3;
+	position: absolute;
+	font-size: 30px;
+	font-weight: 300;
+	opacity: 0;
+	margin: 10px;
+}
+
+#keyword1 {
+	top: 10px;
+	left: 30px;
+}
+
+#keyword2 {
+	top: 100px;
+	left: 400px;
+}
+
+#keyword3 {
+	top: 57px;
+	left: 800px;
+}
+
+#keyword4 {
+	top: 110px;
+	left: 1000px;
 }
 
 @media only screen and (max-width: 600px) {
