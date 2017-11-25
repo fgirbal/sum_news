@@ -68,7 +68,7 @@ def summ_extraction(text):
 		for i in range(0,lenw):
 			cnt = word_vec.count(w[i])
 			r_val_mat[j] += tf_idf_mat[j,i]*cnt
-		r_val_mat[j] = r_val_mat[j]/len(word_vec)
+		r_val_mat[j] = (r_val_mat[j]/len(word_vec))/(0.1 + np.abs(lenC/2 - j))
 
 	print r_val_mat
 	print C[np.argmin(r_val_mat)]
