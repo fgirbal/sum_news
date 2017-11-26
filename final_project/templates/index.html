@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SumNews</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body id="body" onload="firstLoad()">
+
+<div id="pop_up_menu_button">
+	<a id="pop_up_a" href="javascript:popUpMenu()"><i class="fa fa-bars" aria-hidden="true"></i></a>
+</div>
+
+<div id="main_content">
+	<h1 id='header_text'><span id="daytime"></span></h1>
+	<h2 id='main_text'>Here goes the summary in general, shouldn't be more than a 4 or 5 lines. It should contain some <a href="http://crazy.com">links</a> which will lead to the actual news. But this will contain more than two lines... This text doesn't actually mean anything, it's just filler. I could use Lorem Ipsum, but I'm lazy. Hopefuly this is enough.</h2>
+	<h5><a href="" target="_blank" id="tell_me_more">Tell me more</a> <span id="divider">|</span> <a href="javascript:tellMeMore()">Next article</a></h5>
+</div>
+
+<p id="keyword1" class="keyword">example1</p>
+<p id="keyword2" class="keyword">example2</p>
+<p id="keyword3" class="keyword">example3</p>
+<p id="keyword4" class="keyword">example4</p>
+
+<div id="panel">
+	<h1 style="padding: 0; margin-top: 0;">Settings</h1>
+	<h2>News Sources:</h2>
+	<form>
+		<div class="checkbox_div"><input id="checkbox1" class="checkBox" type="checkbox"><p>Al Jazeera English</p></div>
+		<div class="checkbox_div"><input id="checkbox2" class="checkBox" type="checkbox" checked="true"><p>Bloomberg</p></div>
+		<div class="checkbox_div"><input id="checkbox3" class="checkBox" type="checkbox"><p>Breitbart</p></div>
+		<div class="checkbox_div"><input id="checkbox4" class="checkBox" type="checkbox"><p>Business Insider</p></div>
+		<div class="checkbox_div"><input id="checkbox5" class="checkBox" type="checkbox"><p>CNN</p></div>
+		<div class="checkbox_div"><input id="checkbox6" class="checkBox" type="checkbox"><p>Fox News</p></div>
+		<div class="checkbox_div"><input id="checkbox7" class="checkBox" type="checkbox"><p>Politico</p></div>
+		<div class="checkbox_div"><input id="checkbox8" class="checkBox" type="checkbox"><p>Reuters</p></div>
+		<div class="checkbox_div"><input id="checkbox9" class="checkBox" type="checkbox"><p>The New York Times</p></div>
+		<div class="checkbox_div"><input id="checkbox10" class="checkBox" type="checkbox"><p>The Wall Street Journal</p></div>
+		<div class="checkbox_div"><input id="checkbox11" class="checkBox" type="checkbox"><p>Wired</p></div>
+	</form>
+	<p><a href="javascript:toggleScheme()">Toggle scheme</a></p>
+	<p style="font-size: smaller; padding-top: 33vh">by <a href="https://en.wikipedia.org/wiki/Portuguese_cuisine" target="_blank"><i>bitoque</i></a></p>
+</div>
+
+<a href="javascript:closePopUpMenu()"><div id="cover_panel"></div></a>
+
+</body>
+
+<script type="text/javascript">
+	var num_art = 2;
+	var checkboxToText = ["al-jazeera-english", "bloomberg", "breitbart-news", "business-insider", "cnn", "fox-news", "politico", "reuters", "the-new-york-times", "the-wall-street-journal", "wired"];
+	var news_sources = ["bloomberg"];
+
+	function popUpMenu() {
+		document.getElementById("panel").style.visibility = "visible";
+		document.getElementById("cover_panel").style.visibility = "visible";
+
+		document.getElementById("panel").style.opacity = 1;
+		document.getElementById("panel").style.left = "75%";
+		document.getElementById("cover_panel").style.opacity = 0.7;
+	}
+
+	function closePopUpMenu() {
+		new_news_sources = [];
+		for (var i = 1; i <= checkboxToText.length; i++) {
+			var kword = "checkbox".concat(i);
+			if(document.getElementById(kword).checked) {
+				new_news_sources.push(checkboxToText[i-1]);
+			}
+		}
+
+		document.getElementById("panel").style.opacity = 0;
+		document.getElementById("panel").style.left = "100%";
+		document.getElementById("cover_panel").style.opacity = 0;
+
+		document.getElementById("panel").style.visibility = "hidden";
+		document.getElementById("cover_panel").style.visibility = "hidden";
+
+		if(new_news_sources.toString() != news_sources.toString()){
+			num_art = 1;
+			tellMeMore();
+		}
+
+		news_sources = new_news_sources;
+	}
+
+	function runPyScript(num) {
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "requestnews",
+            async: false,
+            data: { 'num': num, 'news_sources': news_sources.toString() }
+        });
+
+        return jqXHR.responseText;
+    }
+
+	function toggleScheme() {
+		var x = document.querySelector('body');
+		if (x.style.background == "black") {
+			x.style.background = "white";
+			document.getElementById("header_text").style.color = "black";
+			document.getElementById("pop_up_a").style.color = "black";
+			document.getElementById("main_text").style.color = "#424242";
+			document.getElementById("divider").style.color = "#424242";
+			for (var i = 1; i <= 4; i++) {
+				var kword = "keyword".concat(i);
+				document.getElementById(kword).style.color = "#D3D3D3";
+			}
+		} else {
+			x.style.background = "black";
+			document.getElementById("header_text").style.color = "white";
+			document.getElementById("pop_up_a").style.color = "white";
+			document.getElementById("main_text").style.color = "#CECECE";
+			document.getElementById("divider").style.color = "#CECECE";
+			for (var i = 1; i <= 4; i++) {
+				var kword = "keyword".concat(i);
+				document.getElementById(kword).style.color = "#525252";
+			}
+		}
+	}
+
+	function firstLoad() {
+		document.getElementById("pop_up_a").style.color = "black";
+		document.querySelector("body").style.cursor = "progress";
+
+		// Get the first article
+		result = runPyScript(1);
+        var myArr = JSON.parse(result);
+        document.getElementById("main_text").innerHTML = myArr.text;
+        document.getElementById("tell_me_more").href = myArr.url;
+        var keyword_arr = myArr.keywords.split(',');
+
+        var d = new Date();
+		var n = d.getHours();
+		if (n < 12 && n > 5) {
+			document.getElementById("daytime").innerHTML = "Good Morning Joe,";
+		} else if (n > 12 && n < 19) {
+			document.getElementById("daytime").innerHTML = "Good Afternoon Joe,";
+		} else {
+			document.getElementById("daytime").innerHTML = "Good Evening Joe,";
+			document.querySelector("body").style.background = "black";
+			document.getElementById("header_text").style.color = "white";
+			document.getElementById("main_text").style.color = "#CECECE";
+			document.getElementById("divider").style.color = "#CECECE";
+			for (var i = 1; i <= 4; i++) {
+				var kword = "keyword".concat(i);
+				document.getElementById(kword).style.color = "#525252";
+			}
+		}
+
+        document.getElementById("body").style.visibility = "visible";
+
+		document.getElementById("main_text").style.opacity = 1;
+		document.querySelector("body").style.cursor = "default";
+
+		for (var i = 1; i <= 4; i++) {
+			var kword = "keyword".concat(i);
+			var rand1 = 2*Math.random()+2;
+			document.getElementById(kword).innerHTML = keyword_arr[i-1];
+			document.getElementById(kword).style.transition = "opacity ".concat(rand1, "s");
+			document.getElementById(kword).style.opacity = 1;
+		}
+	}
+
+	function tellMeMore() {
+		document.querySelector("body").style.cursor = "progress";
+
+		// go back
+		document.getElementById("main_text").style.transition = "opacity 1s";
+		document.getElementById("main_text").style.opacity = 0;
+		for (var i = 1; i <= 4; i++) {
+			var kword = "keyword".concat(i);
+			document.getElementById(kword).style.transition = "opacity 1.5s";
+			document.getElementById(kword).style.opacity = 0;
+		}
+
+		setTimeout(function(){
+			// change the text by calling the functions
+			// Get the first article
+			// 
+			//var x = Math.ceil(5*Math.random()+4);
+			result = runPyScript(num_art);
+			num_art += 1;
+			var myArr = JSON.parse(result);
+			document.getElementById("main_text").innerHTML = myArr.text;
+	        document.getElementById("tell_me_more").href = myArr.url;
+	        var keyword_arr = myArr.keywords.split(',');
+
+			var pixel_array = ["10px", "81px", "40px", "115px"];
+
+			// go back
+			document.getElementById("main_text").style.transition = "opacity 1.5s";
+			document.getElementById("main_text").style.opacity = 1;
+			document.querySelector("body").style.cursor = "default";
+
+			for (var i = 1; i <= 4; i++) {
+				var kword = "keyword".concat(i);
+				document.getElementById(kword).innerHTML = keyword_arr[i-1];
+				document.getElementById(kword).style.position = "absolute";
+				document.getElementById(kword).style.top = pixel_array[i-1];
+				document.getElementById(kword).style.left = Math.ceil(1000*Math.random()).toString().concat("px");
+				var rand1 = 2*Math.random();
+				document.getElementById(kword).style.transition = "opacity ".concat(rand1, "s");
+				document.getElementById(kword).style.opacity = 1;
+			}
+		}, 1500); 
+	}
+
+	// TODO: functions to call the news API and summarize the concatenation
+</script>
+</html>
