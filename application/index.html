@@ -2,7 +2,9 @@
 <html>
 <head>
 	<title>MinimalNews</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/style.css') }}">
+	<script src="{{ url_for('static', filename='https://code.jquery.com/jquery-2.2.4.js') }}" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 </head>
 <body id="body" onload="firstLoad()">
 
@@ -12,7 +14,7 @@
 	<h5><a href="javascript:tellMeMore()">Tell me more</a></h5>
 </div>
 <div id="main_bar">
-	<p><a href="javascript:toggleScheme()">Toggle scheme</a></p>
+	<p><a href="javascript:toggleScheme()">Toggle scheme</a> | <a href="javascript:callPython()">Go python</a></p>
 </div>
 
 <p id="keyword1" class="keyword">example1</p>
@@ -23,6 +25,23 @@
 </body>
 
 <script type="text/javascript">
+	function callPython() {
+		datatosend = 'this is my matrix';
+        result = runPyScript(datatosend);
+        console.log('Got back ' + result);
+	}
+
+	function runPyScript(input){
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "http://localhost/minimalnews/login",
+            async: false,
+            data: { mydata: input }
+        });
+
+        return jqXHR.responseText;
+    }
+
 	function toggleScheme() {
 		var x = document.querySelector('body');
 		if (x.style.background == "black") {
